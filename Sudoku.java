@@ -1,5 +1,5 @@
 public class Sodoku{
-	public static void main(String... args) {
+	    public static void main(String... args) {
         var puzzle = new int[82];
         puzzle[81] = -1;
         try {
@@ -32,16 +32,14 @@ public class Sodoku{
 
     private static boolean solveSudoku(int[] puzzle) {
         var indexPointer = 0;
-        while (true) {
-            if (puzzle[indexPointer] == 0)
-                break;
+        while (puzzle[indexPointer] != 0) {
             if (puzzle[indexPointer] == -1)
                 return true;
             indexPointer++;
         }
         var availableElementsFlag = findAvailableElements(puzzle, indexPointer);
         for (int digit = 1; digit <= 9; digit++) {
-            if ((availableElementsFlag >>> digit) % 2 == 1) {
+            if ((availableElementsFlag >>> digit) % 2 == 0) {
                 puzzle[indexPointer] = digit;
             } else {
                 continue;
@@ -53,24 +51,24 @@ public class Sodoku{
         return false;
     }
 
-    private static long findAvailableElements(int[] puzzle, int indexPointer) {
-        var flagRow = 0L;
+    private static int findAvailableElements(int[] puzzle, int indexPointer) {
+        var flagRow = 0;
         var startOfRow = indexPointer / 9 * 9;
         for (int offset = 0; offset < 9; offset++) {
-            flagRow |= 1L << puzzle[startOfRow + offset];
+            flagRow |= 1 << puzzle[startOfRow + offset];
         }
-        var flagColumn = 0L;
+        var flagColumn = 0;
         var startOfColumn = indexPointer % 9;
         for (int offset = 0; offset < 9; offset++) {
-            flagColumn |= (1L << puzzle[startOfColumn + 9 * offset]);
+            flagColumn |= 1 << puzzle[startOfColumn + 9 * offset];
         }
-        var flagSquare = 0L;
+        var flagSquare = 0;
         var startOfSquare = startOfRow / 27 * 27 + startOfColumn / 3 * 3;
         for (int offsetColumn = 0; offsetColumn < 3; offsetColumn++) {
             for (int offsetRow = 0; offsetRow < 3; offsetRow++) {
-                flagSquare |= 1L << puzzle[startOfSquare + offsetColumn + offsetRow * 9];
+                flagSquare |= 1 << puzzle[startOfSquare + offsetColumn + offsetRow * 9];
             }
         }
-        return ~(flagRow | flagColumn | flagSquare);
+        return flagRow | flagColumn | flagSquare;
     }
 }
