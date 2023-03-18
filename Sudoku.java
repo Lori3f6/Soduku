@@ -1,5 +1,5 @@
 public class Sodoku{
-	    public static void main(String... args) {
+    public static void main(String... args) {
         var puzzle = new int[82];
         puzzle[81] = -1;
         try {
